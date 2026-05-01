@@ -6,7 +6,7 @@
 #include <string>
 using namespace std;
 
-// Cart item structure
+// Cart item 
 struct CartItem {
     int productID;
     string productName;
