@@ -13,6 +13,8 @@ private:
     string category;
     double price;
     int stockQuantity;
+    int getProductID() const;
+    double getPrice() const;
 
 public:
     // Constructors
