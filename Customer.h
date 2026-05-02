@@ -6,29 +6,29 @@
 #include <string>
 using namespace std;
 
-// Cart item 
+// Cart item struct
 struct CartItem {
-    int productID;
+    int    productID;
     string productName;
     double price;
-    int quantity;
+    int    quantity;
 };
 
-// Order structure
-struct Order {
-    int orderID;
+// OrderRecord: renamed from 'Order' to avoid clash with class Order in Order.h
+struct OrderRecord {
+    int              orderID;
     vector<CartItem> items;
-    double totalAmount;
-    string status;
+    double           totalAmount;
+    string           status;
 };
 
 // Customer class (inherits User)
 class Customer : public User {
 
 private:
-    string address;
-    vector<CartItem> cart;
-    vector<Order> orderHistory;
+    string              address;
+    vector<CartItem>    cart;
+    vector<OrderRecord> orderHistory;
 
     static int nextOrderID;
 
@@ -46,9 +46,9 @@ public:
     // Destructor
     ~Customer() override;
 
-    // Address
+    // Getters / Setters
     string getAddress() const;
-    void setAddress(const string& newAddress);
+    void   setAddress(const string& newAddress);
 
     // Cart operations
     void browseProducts() const;
@@ -62,7 +62,7 @@ public:
     bool makePayment(double amount);
     void viewOrderHistory() const;
 
-    // Override
+    // Override (Polymorphism)
     void displayProfile() const override;
 };
 

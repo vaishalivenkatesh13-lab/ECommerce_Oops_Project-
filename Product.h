@@ -13,8 +13,6 @@ private:
     string category;
     double price;
     int stockQuantity;
-    int getProductID() const;
-    double getPrice() const;
 
 public:
     // Constructors
@@ -26,6 +24,13 @@ public:
 
     // Destructor
     ~Product();
+
+    // Getters  ← moved from private to public (they ARE getters, just misplaced)
+    int    getProductID()   const;
+    double getPrice()       const;
+    string getProductName() const;
+    string getCategory()    const;
+    int    getStock()       const;
 
     // Functions
     void displayProduct() const;

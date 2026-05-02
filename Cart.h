@@ -9,16 +9,16 @@ class Cart {
 
 private:
     vector<Product> items;
-    double totalAmount;
+    double          totalAmount;
 
 public:
     Cart();
 
-    void addItem(Product p);
-    void removeItem(int productID);
-    void displayCart() const;
+    void   addItem(Product p);
+    void   removeItem(int productID);
+    void   displayCart() const;
     double calculateTotal();
-    void clearCart();
+    void   clearCart();
 };
 
 #endif

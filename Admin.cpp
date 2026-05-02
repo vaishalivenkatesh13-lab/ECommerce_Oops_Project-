@@ -1,19 +1,20 @@
 #include "Admin.h"
+#include <iostream>
+using namespace std;
 
-// Default Constructor
+// ─── Constructors ────────────────────────────────────────────────────────────
+
 Admin::Admin()
     : User()
 {
 }
 
-// Parameterized Constructor
 Admin::Admin(int id, const string& name, const string& email,
              const string& password, const string& phone)
     : User(id, name, email, password, phone)
 {
 }
 
-// Copy Constructor
 Admin::Admin(const Admin& other)
     : User(other)
 {
@@ -23,38 +24,35 @@ Admin::Admin(const Admin& other)
 Admin::~Admin() {
 }
 
-// Add Product
+// ─── Admin Actions ────────────────────────────────────────────────────────────
+
 void Admin::addProduct() {
-    cout << "Product added\n";
+    cout << "  [Admin] Product added to catalog.\n";
 }
 
-// Remove Product
 void Admin::removeProduct() {
-    cout << "Product removed\n";
+    cout << "  [Admin] Product removed from catalog.\n";
 }
 
-// Update Product
 void Admin::updateProduct() {
-    cout << "Product updated\n";
+    cout << "  [Admin] Product updated.\n";
 }
 
-// View Orders
 void Admin::viewOrders() {
-    cout << "Viewing all orders\n";
+    cout << "  [Admin] Viewing all orders.\n";
 }
 
-// Manage Delivery
 void Admin::manageDelivery() {
-    cout << "Managing delivery\n";
+    cout << "  [Admin] Managing delivery assignments.\n";
 }
 
-// View Customers
 void Admin::viewCustomerList() {
-    cout << "Viewing customers\n";
+    cout << "  [Admin] Viewing registered customer list.\n";
 }
 
-// Display Profile
+// ─── Display Profile (Polymorphism override) ─────────────────────────────────
+
 void Admin::displayProfile() const {
     User::displayProfile();
-    cout << "Role: Admin\n";
+    cout << "  Role   : Admin\n";
 }

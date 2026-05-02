@@ -7,59 +7,44 @@ Cart::Cart() {
     totalAmount = 0;
 }
 
-
 // Add Item
 void Cart::addItem(Product p) {
     items.push_back(p);
     totalAmount = calculateTotal();
 }
 
-
 // Remove Item
 void Cart::removeItem(int productID) {
-
     for (int i = 0; i < (int)items.size(); i++) {
-        // assuming Product has getProductID()
-        if (items[i].getProductID() == productID) {
+        if (items[i].getProductID() == productID) {   // now public getter ✓
             items.erase(items.begin() + i);
             break;
         }
     }
-
     totalAmount = calculateTotal();
 }
 
-
 // Display Cart
 void Cart::displayCart() const {
-
     if (items.empty()) {
-        cout << "Cart is empty\n";
+        cout << "  [Cart] Cart is empty.\n";
         return;
     }
-
     for (int i = 0; i < (int)items.size(); i++) {
         items[i].displayProduct();
         cout << endl;
     }
-
-    cout << "Total: " << totalAmount << endl;
+    cout << "  Total: Rs." << totalAmount << endl;
 }
-
 
 // Calculate Total
 double Cart::calculateTotal() {
-
     double total = 0;
-
     for (int i = 0; i < (int)items.size(); i++) {
-        // assuming Product has getPrice()
-        total += items[i].getPrice();
+        total += items[i].getPrice();   // now public getter ✓
     }
-
     return total;
 }
-
 
 // Clear Cart
 void Cart::clearCart() {

@@ -27,7 +27,7 @@ public:
     void manageDelivery();
     void viewCustomerList();
 
-    // Override
+    // Override (Polymorphism)
     void displayProfile() const override;
 };
 

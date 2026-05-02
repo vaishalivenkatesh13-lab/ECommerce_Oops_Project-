@@ -42,7 +42,7 @@ public:
     void login(const string& enteredPassword);
     void logout();
 
-    virtual void displayProfile() const;  
+    virtual void displayProfile() const;
     void updateProfile();
 };
 

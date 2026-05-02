@@ -9,16 +9,15 @@ using namespace std;
 class Order {
 
 private:
-    int orderID;
-    int customerID;
+    int             orderID;
+    int             customerID;
     vector<Product> orderedProducts;
-    double totalBill;
-    string orderStatus;
-    string deliveryStatus;
+    double          totalBill;
+    string          orderStatus;
+    string          deliveryStatus;
 
 public:
     Order();
-
     Order(int orderID, int customerID, vector<Product> products);
 
     void placeOrder();

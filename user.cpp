@@ -1,8 +1,8 @@
-#include "user.h"
+#include "User.h"
 #include <limits>
 
+// --- Constructors ------------------------------------------------------------
 
-// Constructors
 User::User()
     : userID(0), name(""), email(""), password(""), phone(""),
       isLoggedIn(false)
@@ -23,12 +23,12 @@ User::User(const User& other)
 {
 }
 
-
 // Destructor
 User::~User() {
 }
 
-// Getters
+// --- Getters -----------------------------------------------------------------
+
 int User::getUserID() const {
     return userID;
 }
@@ -49,7 +49,8 @@ bool User::getLoginStatus() const {
     return isLoggedIn;
 }
 
-// Setters
+// --- Setters -----------------------------------------------------------------
+
 void User::setName(const string& newName) {
     if (!newName.empty()) {
         name = newName;
@@ -67,11 +68,18 @@ void User::setEmail(const string& newEmail) {
 }
 
 void User::setPhone(const string& newPhone) {
-    if (newPhone.length() == 10) {
-        phone = newPhone;
-    } else {
-        cout << "[User] Error: Phone must be 10 digits." << endl;
+    if (newPhone.length() != 10) {
+        cout << "  [User] Error: Phone must be exactly 10 digits." << endl;
+        return;
     }
+    for (char c : newPhone) {
+        if (!isdigit(c)) {
+            cout << "  [User] Error: Phone must contain only numbers." << endl;
+            return;
+        }
+    }
+    phone = newPhone;
+    cout << "  [User] Phone updated successfully." << endl;
 }
 
 void User::setPassword(const string& newPassword) {
@@ -83,8 +91,8 @@ void User::setPassword(const string& newPassword) {
     }
 }
 
+// --- Login / Logout ----------------------------------------------------------
 
-// Member Functions
 void User::login(const string& enteredPassword) {
     if (isLoggedIn) {
         cout << "[User] " << name << " is already logged in." << endl;
@@ -107,26 +115,30 @@ void User::logout() {
     }
 }
 
+// --- Display Profile (virtual - overridden in Customer & Admin) --------------
+
 void User::displayProfile() const {
-    cout << "─────────────────────────────" << endl;
-    cout << "  User Profile" << endl;
-    cout << "─────────────────────────────" << endl;
-    cout << "  ID     : " << userID << endl;
-    cout << "  Name   : " << name << endl;
-    cout << "  Email  : " << email << endl;
-    cout << "  Phone  : " << phone << endl;
+    cout << "\n  -----------------------------" << endl;
+    cout << "    User Profile"                  << endl;
+    cout << "  -----------------------------" << endl;
+    cout << "  ID     : " << userID             << endl;
+    cout << "  Name   : " << name               << endl;
+    cout << "  Email  : " << email              << endl;
+    cout << "  Phone  : " << phone              << endl;
     cout << "  Status : " << (isLoggedIn ? "Logged In" : "Logged Out") << endl;
-    cout << "─────────────────────────────" << endl;
+    cout << "  -----------------------------" << endl;
 }
+
+// --- Update Profile ----------------------------------------------------------
 
 void User::updateProfile() {
     int choice;
-    cout << "\n[Update Profile]" << endl;
-    cout << "1. Update Name" << endl;
-    cout << "2. Update Email" << endl;
-    cout << "3. Update Phone" << endl;
-    cout << "4. Update Password" << endl;
-    cout << "Enter choice: ";
+    cout << "\n  [Update Profile]" << endl;
+    cout << "  1. Update Name"    << endl;
+    cout << "  2. Update Email"   << endl;
+    cout << "  3. Update Phone"   << endl;
+    cout << "  4. Update Password"<< endl;
+    cout << "  Enter choice: ";
 
     cin >> choice;
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -134,26 +146,26 @@ void User::updateProfile() {
     string input;
     switch (choice) {
         case 1:
-            cout << "Enter new name: ";
+            cout << "  Enter new name: ";
             getline(cin, input);
             setName(input);
             break;
         case 2:
-            cout << "Enter new email: ";
+            cout << "  Enter new email: ";
             getline(cin, input);
             setEmail(input);
             break;
         case 3:
-            cout << "Enter new phone (10 digits): ";
+            cout << "  Enter new phone (10 digits): ";
             getline(cin, input);
             setPhone(input);
             break;
         case 4:
-            cout << "Enter new password (min 6 chars): ";
+            cout << "  Enter new password (min 6 chars): ";
             getline(cin, input);
             setPassword(input);
             break;
         default:
-            cout << "[User] Invalid choice." << endl;
+            cout << "  [User] Invalid choice." << endl;
     }
 }

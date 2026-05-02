@@ -30,13 +30,36 @@ Product::~Product() {
 }
 
 
+// ─── Getters (moved to public in Product.h — they are standard getters) ───
+
+int Product::getProductID() const {
+    return productID;
+}
+
+double Product::getPrice() const {
+    return price;
+}
+
+string Product::getProductName() const {
+    return productName;
+}
+
+string Product::getCategory() const {
+    return category;
+}
+
+int Product::getStock() const {
+    return stockQuantity;
+}
+
+
 // Display Product
 void Product::displayProduct() const {
-    cout << "ID: " << productID << endl;
-    cout << "Name: " << productName << endl;
-    cout << "Category: " << category << endl;
-    cout << "Price: " << price << endl;
-    cout << "Stock: " << stockQuantity << endl;
+    cout << "  ID       : " << productID       << endl;
+    cout << "  Name     : " << productName     << endl;
+    cout << "  Category : " << category        << endl;
+    cout << "  Price    : Rs." << price        << endl;
+    cout << "  Stock    : " << stockQuantity   << endl;
 }
 
 
