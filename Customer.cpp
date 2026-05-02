@@ -31,7 +31,13 @@ Customer::Customer(const Customer& other)
 // Destructor
 Customer::~Customer() {
 }
+int Product::getProductID() const {
+    return productID;
+}
 
+double Product::getPrice() const {
+    return price;
+}
 
 // Get Address
 string Customer::getAddress() const {
