@@ -11,14 +11,15 @@ using namespace std;
 class Authentication {
 
 private:
-    vector<User> users;   // Stores all registered users
+    vector<User*> users;   // Stores all registered users
 
 public:
-    // Constructor
+    // Constructor / Destructor
     Authentication();
+    ~Authentication();
 
     // Core Functionalities
-    void  registerUser(const User& newUser);
+    void  registerUser(User* newUser);
     User* validateLogin(const string& email, const string& password);
     void  forgotPassword(const string& email);
 

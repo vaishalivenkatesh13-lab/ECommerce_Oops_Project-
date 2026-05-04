@@ -10,14 +10,14 @@ int Customer::nextOrderID = 1001;
 // ─── Constructors ───────────────────────────────────────────────────────────
 
 Customer::Customer()
-    : User(), address("")
+    : User(0, "", "", "", "", "Customer"), address("")
 {
 }
 
 Customer::Customer(int id, const string& name, const string& email,
                    const string& password, const string& phone,
                    const string& address)
-    : User(id, name, email, password, phone),
+    : User(id, name, email, password, phone, "Customer"),
       address(address)
 {
 }

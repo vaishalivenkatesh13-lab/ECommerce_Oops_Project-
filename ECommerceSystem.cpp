@@ -41,16 +41,32 @@ void ECommerceSystem::startSystem() {
 
             int    id;
             string name, email, password, phone;
+            char roleChoice;
 
             cout << "\n  -- Registration --------------\n";
-            cout << "  Enter ID      : "; cin >> id; cin.ignore();
+            cout << "  Are you registering as Admin or Customer (A/C)? ";
+            cin >> roleChoice; cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "  Enter ID      : "; cin >> id; cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "  Enter Name    : "; getline(cin, name);
             cout << "  Enter Email   : "; getline(cin, email);
             cout << "  Enter Password: "; getline(cin, password);
             cout << "  Enter Phone   : "; getline(cin, phone);
 
-            User newUser(id, name, email, password, phone);
+            User* newUser = nullptr;
+            if (toupper(roleChoice) == 'A') {
+                newUser = new Admin(id, name, email, password, phone);
+            } else {
+                newUser = new Customer(id, name, email, password, phone, "Not Provided");
+            }
             auth.registerUser(newUser);
+
+            // Directly log in and go to dashboard
+            newUser->login(password);
+            if (newUser->getRole() == "Admin") {
+                adminMenu(newUser);
+            } else {
+                customerMenu(newUser);
+            }
 
         } else if (choice == 2) {
 
@@ -61,7 +77,11 @@ void ECommerceSystem::startSystem() {
 
             User* loggedUser = auth.validateLogin(email, password);
             if (loggedUser != nullptr) {
-                mainMenu(loggedUser);
+                if (loggedUser->getRole() == "Admin") {
+                    adminMenu(loggedUser);
+                } else {
+                    customerMenu(loggedUser);
+                }
             }
 
         } else if (choice == 3) {
@@ -74,32 +94,7 @@ void ECommerceSystem::startSystem() {
 }
 
 
-// ─── MAIN MENU ───────────────────────────────────────────────────────────────
-void ECommerceSystem::mainMenu(User* loggedUser) {
-
-    bool active = true;
-    while (active) {
-        cout << "\n  -- Main Menu -----------------\n";
-        cout << "  1. Customer Portal\n  2. Admin Portal\n  3. Back\n";
-        cout << "  Choice: ";
-
-        int choice;
-        if (!(cin >> choice)) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "  Invalid input. Try again.\n";
-            continue;
-        }
-
-        if (choice == 1) {
-            customerMenu(loggedUser);
-        } else if (choice == 2) {
-            adminMenu(loggedUser);
-        } else {
-            active = false;
-        }
-    }
-}
+// ─── MAIN MENU REMOVED (Replaced by direct role-based routing) ───────────────
 
 
 // ─── CUSTOMER MENU ──────────────────────────────────────────────────────────
@@ -107,14 +102,11 @@ void ECommerceSystem::customerMenu(User* user) {
 
     if (user == nullptr) return;
 
-    // Build a working Customer for this session using the real logged-in user
-    Customer c(user->getUserID(), user->getName(), user->getEmail(), 
-               "hidden_pass", user->getPhone(), "Not Provided (Update in Profile)");
-               
-    // Silently log in the customer object so displayProfile shows "Logged In"
-    cout.setstate(ios_base::failbit);
-    c.login("hidden_pass");
-    cout.clear();
+    Customer* c = dynamic_cast<Customer*>(user);
+    if (!c) {
+        cout << "  [Error] Invalid user role for Customer Menu.\n";
+        return;
+    }
 
     bool active = true;
     while (active) {
@@ -148,28 +140,28 @@ void ECommerceSystem::customerMenu(User* user) {
             // Look up product in central catalog
             if (productCatalog.find(pid) != productCatalog.end()) {
                 Product& p = productCatalog[pid];
-                c.addToCart(p.getProductID(), p.getProductName(),
+                c->addToCart(p.getProductID(), p.getProductName(),
                             p.getPrice(), qty);
             } else {
                 cout << "  [Error] Product ID not found.\n";
             }
 
         } else if (choice == 3) {
-            c.viewCart();
+            c->viewCart();
 
         } else if (choice == 4) {
             int pid;
             cout << "  Enter Product ID to remove: "; cin >> pid;
-            c.removeFromCart(pid);
+            c->removeFromCart(pid);
 
         } else if (choice == 5) {
-            c.checkout();
+            c->checkout();
 
         } else if (choice == 6) {
-            c.viewOrderHistory();
+            c->viewOrderHistory();
 
         } else if (choice == 7) {
-            c.displayProfile();
+            c->displayProfile();
 
         } else {
             active = false;
@@ -183,14 +175,11 @@ void ECommerceSystem::adminMenu(User* user) {
 
     if (user == nullptr) return;
 
-    // Use the logged-in user to build the Admin session
-    Admin a(user->getUserID(), user->getName(), user->getEmail(), 
-            "hidden_pass", user->getPhone());
-
-    // Silently log in the admin object so displayProfile shows "Logged In"
-    cout.setstate(ios_base::failbit);
-    a.login("hidden_pass");
-    cout.clear();
+    Admin* a = dynamic_cast<Admin*>(user);
+    if (!a) {
+        cout << "  [Error] Invalid user role for Admin Menu.\n";
+        return;
+    }
 
     bool active = true;
     while (active) {
@@ -261,7 +250,7 @@ void ECommerceSystem::adminMenu(User* user) {
             auth.displayAllUsers();
 
         } else if (choice == 6) {
-            a.displayProfile();
+            a->displayProfile();
 
         } else {
             active = false;

@@ -4,20 +4,20 @@
 // --- Constructors ------------------------------------------------------------
 
 User::User()
-    : userID(0), name(""), email(""), password(""), phone(""),
+    : role("User"), userID(0), name(""), email(""), password(""), phone(""),
       isLoggedIn(false)
 {
 }
 
 User::User(int id, const string& name, const string& email,
-           const string& password, const string& phone)
-    : userID(id), name(name), email(email),
+           const string& password, const string& phone, const string& role)
+    : role(role), userID(id), name(name), email(email),
       password(password), phone(phone), isLoggedIn(false)
 {
 }
 
 User::User(const User& other)
-    : userID(other.userID), name(other.name), email(other.email),
+    : role(other.role), userID(other.userID), name(other.name), email(other.email),
       password(other.password), phone(other.phone),
       isLoggedIn(other.isLoggedIn)
 {
@@ -47,6 +47,10 @@ string User::getPhone() const {
 
 bool User::getLoginStatus() const {
     return isLoggedIn;
+}
+
+string User::getRole() const {
+    return role;
 }
 
 // --- Setters -----------------------------------------------------------------

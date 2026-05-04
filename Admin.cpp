@@ -5,13 +5,13 @@ using namespace std;
 // ─── Constructors ────────────────────────────────────────────────────────────
 
 Admin::Admin()
-    : User()
+    : User(0, "", "", "", "", "Admin")
 {
 }
 
 Admin::Admin(int id, const string& name, const string& email,
              const string& password, const string& phone)
-    : User(id, name, email, password, phone)
+    : User(id, name, email, password, phone, "Admin")
 {
 }
 

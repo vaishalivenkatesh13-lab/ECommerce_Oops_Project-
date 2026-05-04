@@ -7,6 +7,9 @@ using namespace std;
 
 class User {
 
+protected:
+    string role;
+
 private:
     int    userID;
     string name;
@@ -19,7 +22,7 @@ public:
     // Constructors
     User();
     User(int id, const string& name, const string& email,
-         const string& password, const string& phone);
+         const string& password, const string& phone, const string& role = "User");
     User(const User& other);
 
     // Destructor
@@ -31,6 +34,7 @@ public:
     string getEmail()       const;
     string getPhone()       const;
     bool   getLoginStatus() const;
+    virtual string getRole() const;
 
     // Setters
     void setName(const string& newName);

@@ -21,7 +21,6 @@ private:
 public:
     // Core System
     void startSystem();
-    void mainMenu(User* loggedUser);
 
     // Role-based Menus
     void customerMenu(User* user);
