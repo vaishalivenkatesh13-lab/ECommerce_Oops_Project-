@@ -19,9 +19,13 @@ public:
     ~Authentication();
 
     // Core Functionalities
-    void  registerUser(User* newUser);
+    bool  registerUser(User* newUser);
     User* validateLogin(const string& email, const string& password);
     void  forgotPassword(const string& email);
+
+    // Static Validation Utilities
+    static bool isValidEmail(const string& email);
+    static bool isValidPhone(const string& phone);
 
     // Utility
     void displayAllUsers() const;

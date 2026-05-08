@@ -48,9 +48,20 @@ void ECommerceSystem::startSystem() {
             cin >> roleChoice; cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "  Enter ID      : "; cin >> id; cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "  Enter Name    : "; getline(cin, name);
-            cout << "  Enter Email   : "; getline(cin, email);
+            
+            while (true) {
+                cout << "  Enter Email   : "; getline(cin, email);
+                if (Authentication::isValidEmail(email)) break;
+                cout << "  [Error] Invalid email format. Please include '@' and a domain.\n";
+            }
+
             cout << "  Enter Password: "; getline(cin, password);
-            cout << "  Enter Phone   : "; getline(cin, phone);
+
+            while (true) {
+                cout << "  Enter Phone   : "; getline(cin, phone);
+                if (Authentication::isValidPhone(phone)) break;
+                cout << "  [Error] Invalid phone. Must be exactly 10 digits.\n";
+            }
 
             User* newUser = nullptr;
             if (toupper(roleChoice) == 'A') {
@@ -58,14 +69,15 @@ void ECommerceSystem::startSystem() {
             } else {
                 newUser = new Customer(id, name, email, password, phone, "Not Provided");
             }
-            auth.registerUser(newUser);
 
-            // Directly log in and go to dashboard
-            newUser->login(password);
-            if (newUser->getRole() == "Admin") {
-                adminMenu(newUser);
-            } else {
-                customerMenu(newUser);
+            if (auth.registerUser(newUser)) {
+                // Directly log in and go to dashboard only if registration was successful
+                newUser->login(password);
+                if (newUser->getRole() == "Admin") {
+                    adminMenu(newUser);
+                } else {
+                    customerMenu(newUser);
+                }
             }
 
         } else if (choice == 2) {

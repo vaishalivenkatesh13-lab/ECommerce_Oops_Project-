@@ -14,55 +14,68 @@ Authentication::~Authentication() {
 
 
 // ─── Register User ───────────────────────────────────────────────────────────
-void Authentication::registerUser(User* newUser) {
+bool Authentication::registerUser(User* newUser) {
 
     try {
-        if (!newUser) throw invalid_argument("Null user provided.");
+        if (!newUser) return false;
         string email = newUser->getEmail();
         string phone = newUser->getPhone();
 
-        if (email.empty()) {
-            throw invalid_argument("Email cannot be empty.");
-        }
-        if (email.find('@') == string::npos) {
-            throw invalid_argument("Invalid email format.");
+        if (!isValidEmail(email)) {
+            throw invalid_argument("Invalid email format (missing '@').");
         }
 
-        // Phone validation
-        if (phone.length() != 10) {
-            throw invalid_argument("Invalid Phone format: Must be exactly 10 digits.");
-        }
-        for (char c : phone) {
-            if (!isdigit(c)) {
-                throw invalid_argument("Invalid Phone format: Must contain only numbers.");
-            }
+        if (!isValidPhone(phone)) {
+            throw invalid_argument("Invalid Phone format (must be 10 digits).");
         }
 
         // Check for duplicate email
         for (const auto* u : users) {
             if (u->getEmail() == email) {
-                delete newUser; // Prevent memory leak since it won't be stored
+                delete newUser; 
                 throw runtime_error("Email already registered.");
             }
         }
 
         users.push_back(newUser);
         cout << "  [Auth] Registration successful!\n";
+        return true;
     }
     catch (const invalid_argument& e) {
         cout << "  [Auth Input Error] " << e.what() << endl;
         if (newUser) {
+            // Check if user is already in vector before deleting
             bool exists = false;
             for (auto* u : users) {
                 if (u == newUser) exists = true;
             }
             if (!exists) delete newUser;
         }
+        return false;
     }
     catch (const exception& e) {
         cout << "  [Auth Error] " << e.what() << endl;
-        // newUser already deleted if it's a runtime_error for duplicate email, but catch-all safety:
+        return false;
     }
+}
+
+
+// ─── Static Validation Utilities ─────────────────────────────────────────────
+bool Authentication::isValidEmail(const string& email) {
+    if (email.empty()) return false;
+    size_t atPos = email.find('@');
+    if (atPos == string::npos || atPos == 0 || atPos == email.length() - 1) {
+        return false; // Missing @ or @ at start/end
+    }
+    return true;
+}
+
+bool Authentication::isValidPhone(const string& phone) {
+    if (phone.length() != 10) return false;
+    for (char c : phone) {
+        if (!isdigit(c)) return false;
+    }
+    return true;
 }
 
 
